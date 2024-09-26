@@ -16,7 +16,7 @@ typedef struct Pipe {
     bool isActive;
 } Pipe;
 
-void ResetGame(Bird *bird, Pipe *pipe, int *score, int *speed, bool *gameOver) {
+void ResetGame(Bird *bird, Pipe *pipe, int *score, int *speed, bool *gameOver, int *lastScore) {
     // Reiniciar pássaro
     bird->x = (GetScreenWidth() - 300) / 2; // Posição inicial do pássaro
     bird->y = GetScreenHeight() / 2;
@@ -34,6 +34,7 @@ void ResetGame(Bird *bird, Pipe *pipe, int *score, int *speed, bool *gameOver) {
     *score = 0;
     *speed = 2;
     *gameOver = false;
+    *lastScore = 0; // Reinicia o lastScore para evitar problemas no aumento de velocidade
 }
 
 int main(void) {
@@ -42,17 +43,18 @@ int main(void) {
     int score = 0;
     int speed = 2;
     bool gameOver = false;
+    int lastScore = 0; // Nova variável para rastrear a última pontuação que aumentou a velocidade
 
     InitWindow(600, 600, "Crappy bird");
     SetTargetFPS(60);
 
-    ResetGame(&bird, pipe, &score, &speed, &gameOver);
+    ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
 
     while (!WindowShouldClose()) {
         // Atualização do tempo e lógica do jogo
         if (gameOver) {
             if (IsKeyPressed(KEY_R)) {
-                ResetGame(&bird, pipe, &score, &speed, &gameOver);
+                ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
             }
             BeginDrawing();
             ClearBackground(BLACK);
@@ -82,18 +84,21 @@ int main(void) {
             bird.flaping = false; // Pássaro está caindo
         }
 
-
         // Movimento dos canos
         for (int i = 0; i < 2; i++) {
             pipe[i].x -= speed;
-            if (score != 0 && score % 5 == 0) {
-                speed = 2 + (score / 5);
-            }
+
             if (pipe[i].x < -50) {
                 pipe[i].x = GetScreenWidth();
                 pipe[i].height = GetRandomValue(100, GetScreenHeight() - 250); // Gerar nova altura
                 pipe[i].isActive = true;
             }
+        }
+
+        // Aumenta a velocidade do jogo a cada 5 pontos
+        if (score >= lastScore + 5) {
+            speed += 1;   // Incrementa a velocidade em 1
+            lastScore = score;  // Atualiza o último marco
         }
 
         // Verificar colisão com os canos ou com os limites da tela
@@ -115,7 +120,7 @@ int main(void) {
 
         // Desenhar
         BeginDrawing();
-        ClearBackground(BLUE);
+        ClearBackground(DARKBLUE);
 
         // Desenhar pássaro
         DrawRectangle(bird.x, bird.y, 40, 40, YELLOW);
@@ -130,8 +135,10 @@ int main(void) {
 
         // Desenhar canos
         for (int i = 0; i < 2; i++) {
-            DrawRectangle(pipe[i].x, 0, 50, pipe[i].height, GREEN);
-            DrawRectangle(pipe[i].x, pipe[i].height + 150, 50, GetScreenHeight() - pipe[i].height - 150, GREEN);
+            DrawRectangle(pipe[i].x, 0, 50, pipe[i].height, DARKGREEN);
+            DrawRectangle(pipe[i].x - 5, pipe[i].height - 15, 60, 15, LIME);
+            DrawRectangle(pipe[i].x, pipe[i].height + 150, 50, GetScreenHeight() - pipe[i].height - 150, DARKGREEN);
+            DrawRectangle(pipe[i].x - 5, pipe[i].height + 150, 60, 15, LIME);
         }
 
         // Mostrar o placar
