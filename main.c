@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <raylib.h>
+#include <math.h>
 
 // Estrutura para representar o pássaro
 typedef struct Bird {
@@ -37,18 +38,36 @@ void ResetGame(Bird *bird, Pipe *pipe, int *score, int *speed, bool *gameOver, i
     *lastScore = 0; // Reinicia o lastScore para evitar problemas no aumento de velocidade
 }
 
+// Função para interpolar entre duas cores
+Color LerpColor(Color a, Color b, float t) {
+    return (Color){
+        (unsigned char)(a.r + t * (b.r - a.r)),
+        (unsigned char)(a.g + t * (b.g - a.g)),
+        (unsigned char)(a.b + t * (b.b - a.b)),
+        255 // Alpha fixo
+    };
+}
+
 int main(void) {
     Bird bird;
-    Pipe pipe[2]; // Três canos simultâneos na tela
+    Pipe pipe[2]; // Dois canos simultâneos na tela
     int score = 0;
     int speed = 2;
     bool gameOver = false;
     int lastScore = 0; // Nova variável para rastrear a última pontuação que aumentou a velocidade
 
-    InitWindow(600, 600, "Crappy bird");
+    InitWindow(600, 600, "CrappyBird");
+    SetWindowIcon(LoadImage("resources/iconeCrappy.png"));
     SetTargetFPS(60);
 
     ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
+    
+    float startTime = GetTime(); // Tempo inicial do jogo
+
+    Color darkBlue = DARKBLUE;
+    Color skyBlue = SKYBLUE;
+    Color lime = LIME;
+    Color darkGreen = DARKGREEN;
 
     while (!WindowShouldClose()) {
         // Atualização do tempo e lógica do jogo
@@ -114,13 +133,41 @@ int main(void) {
         for (int i = 0; i < 2; i++) {
             if (pipe[i].isActive && bird.x > pipe[i].x + 50) {
                 score++;
-                pipe[i].isActive = false; // Mark this pipe as scored
+                pipe[i].isActive = false; // Marca o cano como pontuado
             }
+        }
+
+        // Alternar gradualmente entre SKYBLUE e DARKBLUE
+        float elapsedTime = GetTime() - startTime;
+        float cycleTime = 40.0f; // Tempo total para ciclo completo (20s clareando e 20s escurecendo)
+        float t = fmod(elapsedTime, cycleTime) / cycleTime; // Valor de interpolação entre 0 e 1
+
+        Color backgroundColor;
+        if (t < 0.5f) {
+            // Transição de SKYBLUE para DARKBLUE
+            backgroundColor = LerpColor(skyBlue, darkBlue, t * 2);
+        } else {
+            // Transição de DARKBLUE para SKYBLUE
+            backgroundColor = LerpColor(darkBlue, skyBlue, (t - 0.5f) * 2);
+        }
+
+        Color pipeColor;
+        if (t < 0.5f) {
+            pipeColor = LerpColor(lime, darkGreen, t * 2);
+        } else {
+            pipeColor = LerpColor(darkGreen, lime, (t - 0.5f) * 2);
+        }
+
+        Color pipeBorderColor;
+        if (t < 0.5f) {
+            pipeBorderColor = LerpColor(darkGreen, lime, t * 2);
+        } else {
+            pipeBorderColor = LerpColor(lime, darkGreen, (t - 0.5f) * 2);
         }
 
         // Desenhar
         BeginDrawing();
-        ClearBackground(DARKBLUE);
+        ClearBackground(backgroundColor); // Alternar entre fundo claro e escuro
 
         // Desenhar pássaro
         DrawRectangle(bird.x, bird.y, 40, 40, YELLOW);
@@ -133,12 +180,12 @@ int main(void) {
             DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, ORANGE);
         }
 
-        // Desenhar canos
+        // Desenhar canos com a cor alternada junto ao céu
         for (int i = 0; i < 2; i++) {
-            DrawRectangle(pipe[i].x, 0, 50, pipe[i].height, DARKGREEN);
-            DrawRectangle(pipe[i].x - 5, pipe[i].height - 15, 60, 15, LIME);
-            DrawRectangle(pipe[i].x, pipe[i].height + 150, 50, GetScreenHeight() - pipe[i].height - 150, DARKGREEN);
-            DrawRectangle(pipe[i].x - 5, pipe[i].height + 150, 60, 15, LIME);
+            DrawRectangle(pipe[i].x, 0, 50, pipe[i].height, pipeColor);
+            DrawRectangle(pipe[i].x - 5, pipe[i].height - 15, 60, 15, pipeBorderColor);
+            DrawRectangle(pipe[i].x, pipe[i].height + 150, 50, GetScreenHeight() - pipe[i].height - 150, pipeBorderColor);
+            DrawRectangle(pipe[i].x - 5, pipe[i].height + 150, 60, 15, pipeColor);
         }
 
         // Mostrar o placar
