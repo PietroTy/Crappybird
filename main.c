@@ -48,6 +48,34 @@ Color LerpColor(Color a, Color b, float t) {
     };
 }
 
+// Função para salvar o *highscore* em um arquivo
+void SaveHighscore(int highscore) {
+    FILE *file = fopen("resources/Highscore.txt", "w");
+    if (file != NULL) {
+        fprintf(file, "%d\n", highscore);
+        fclose(file);
+        printf("Highscore salvo: %d\n", highscore);
+    } else {
+        printf("Erro ao salvar o highscore.\n");
+    }
+}
+
+// Função para carregar o *highscore* do arquivo
+int LoadHighscore() {
+    FILE *file = fopen("resources/Highscore.txt", "r");
+    int highscore = 0;
+
+    if (file != NULL) {
+        fscanf(file, "%d", &highscore);
+        fclose(file);
+        printf("Highscore carregado: %d\n", highscore);
+    } else {
+        printf("Nenhum highscore salvo encontrado.\n");
+    }
+
+    return highscore;
+}
+
 int main(void) {
     Bird bird;
     Pipe pipe[2]; // Dois canos simultâneos na tela
@@ -55,6 +83,7 @@ int main(void) {
     int speed = 2;
     bool gameOver = false;
     int lastScore = 0; // Nova variável para rastrear a última pontuação que aumentou a velocidade
+    int highscore = LoadHighscore(); // Carrega o *highscore* ao iniciar o jogo
 
     InitWindow(600, 600, "CrappyBird");
     SetWindowIcon(LoadImage("resources/iconeCrappy.png"));
@@ -72,6 +101,12 @@ int main(void) {
     while (!WindowShouldClose()) {
         // Atualização do tempo e lógica do jogo
         if (gameOver) {
+
+            if (score > highscore) {
+                highscore = score;
+                SaveHighscore(highscore); // Salva o novo *highscore*
+            }
+
             if (IsKeyPressed(KEY_R)) {
                 ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
             }
@@ -79,10 +114,12 @@ int main(void) {
             ClearBackground(BLACK);
             const char *lostMessage = "You Lost!";
             const char *scoreMessage = TextFormat("Score: %d", score);
+            const char *highscoreMessage = TextFormat("Highscore: %d", highscore);
             const char *resetMessage = "press R to reset";
             DrawText(lostMessage, (GetScreenWidth() - MeasureText(lostMessage, 100)) / 2, (GetScreenHeight() - 200) / 2, 100, WHITE);
             DrawText(scoreMessage, (GetScreenWidth() - MeasureText(scoreMessage, 60)) / 2, (GetScreenHeight() + 100) / 2, 60, WHITE);
-            DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 300) / 2, 30, WHITE);
+            DrawText(highscoreMessage, (GetScreenWidth() - MeasureText(highscoreMessage, 40)) / 2, (GetScreenHeight() + 260) / 2, 40, WHITE);
+            DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 390) / 2, 30, WHITE);
             EndDrawing();
             continue;
         }
@@ -115,7 +152,7 @@ int main(void) {
         }
 
         // Aumenta a velocidade do jogo a cada 5 pontos
-        if (score >= lastScore + 5) {
+        if (score >= lastScore + 5 && speed <= 7) {
             speed += 1;   // Incrementa a velocidade em 1
             lastScore = score;  // Atualiza o último marco
         }
