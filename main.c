@@ -8,6 +8,7 @@ typedef struct Bird {
     float y;
     float g;
     bool flaping;
+    Color color; // Cor do pássaro
 } Bird;
 
 // Estrutura para representar os canos
@@ -81,7 +82,8 @@ int main(void) {
     Pipe pipe[2]; // Dois canos simultâneos na tela
     int score = 0;
     int speed = 2;
-    bool gameOver = false;
+    bool gameOver = true;
+    bool store = true;
     int lastScore = 0; // Nova variável para rastrear a última pontuação que aumentou a velocidade
     int highscore = LoadHighscore(); // Carrega o *highscore* ao iniciar o jogo
 
@@ -102,26 +104,41 @@ int main(void) {
         // Atualização do tempo e lógica do jogo
         if (gameOver) {
 
-            if (score > highscore) {
-                highscore = score;
-                SaveHighscore(highscore); // Salva o novo *highscore*
+            if (store) {
+
+
+
+            } else {
+
+                if (score > highscore) {
+                    highscore = score;
+                    SaveHighscore(highscore); // Salva o novo *highscore*
+                }
+
+                if (IsKeyPressed(KEY_R)) {
+                    ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
+                }
+
+                if (IsKeyPressed(KEY_R)) {
+                    ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
+                }
+
+                BeginDrawing();
+                ClearBackground(BLACK);
+                const char *lostMessage = "You Lost!";
+                const char *scoreMessage = TextFormat("Score: %d", score);
+                const char *highscoreMessage = TextFormat("Highscore: %d", highscore);
+                const char *resetMessage = "press R to reset or S to store";
+                DrawText(lostMessage, (GetScreenWidth() - MeasureText(lostMessage, 100)) / 2, (GetScreenHeight() - 200) / 2, 100, WHITE);
+                DrawText(scoreMessage, (GetScreenWidth() - MeasureText(scoreMessage, 60)) / 2, (GetScreenHeight() + 100) / 2, 60, WHITE);
+                DrawText(highscoreMessage, (GetScreenWidth() - MeasureText(highscoreMessage, 40)) / 2, (GetScreenHeight() + 260) / 2, 40, WHITE);
+                DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 390) / 2, 30, WHITE);
+                EndDrawing();
+                continue;
+
             }
 
-            if (IsKeyPressed(KEY_R)) {
-                ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
-            }
-            BeginDrawing();
-            ClearBackground(BLACK);
-            const char *lostMessage = "You Lost!";
-            const char *scoreMessage = TextFormat("Score: %d", score);
-            const char *highscoreMessage = TextFormat("Highscore: %d", highscore);
-            const char *resetMessage = "press R to reset";
-            DrawText(lostMessage, (GetScreenWidth() - MeasureText(lostMessage, 100)) / 2, (GetScreenHeight() - 200) / 2, 100, WHITE);
-            DrawText(scoreMessage, (GetScreenWidth() - MeasureText(scoreMessage, 60)) / 2, (GetScreenHeight() + 100) / 2, 60, WHITE);
-            DrawText(highscoreMessage, (GetScreenWidth() - MeasureText(highscoreMessage, 40)) / 2, (GetScreenHeight() + 260) / 2, 40, WHITE);
-            DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 390) / 2, 30, WHITE);
-            EndDrawing();
-            continue;
+
         }
 
         // Gravidade no pássaro
