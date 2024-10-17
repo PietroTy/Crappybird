@@ -8,7 +8,7 @@ typedef struct Bird {
     float y;
     float g;
     bool flaping;
-    Color color; // Cor do pássaro
+    int color; // Cor do pássaro
 } Bird;
 
 // Estrutura para representar os canos
@@ -83,9 +83,10 @@ int main(void) {
     int score = 0;
     int speed = 2;
     bool gameOver = true;
-    bool store = true;
+    bool store = false;
     int lastScore = 0; // Nova variável para rastrear a última pontuação que aumentou a velocidade
     int highscore = LoadHighscore(); // Carrega o *highscore* ao iniciar o jogo
+    bird.color = 1;
 
     InitWindow(600, 600, "CrappyBird");
     SetWindowIcon(LoadImage("resources/iconeCrappy.png"));
@@ -106,6 +107,151 @@ int main(void) {
 
             if (store) {
 
+                if (IsKeyPressed(KEY_S)) {
+                    store = false;
+                }
+                if (IsKeyPressed(KEY_KP_1) || IsKeyPressed(KEY_ONE)) {
+                    bird.color = 1;
+                } else if ((IsKeyPressed(KEY_KP_2) || IsKeyPressed(KEY_TWO)) && highscore >= 15) {
+                    bird.color = 2;
+                } else if ((IsKeyPressed(KEY_KP_3) || IsKeyPressed(KEY_THREE)) && highscore >= 20) {
+                    bird.color = 3;
+                } else if ((IsKeyPressed(KEY_KP_4) || IsKeyPressed(KEY_FOUR)) && highscore >= 25) {
+                    bird.color = 4;
+                } else if ((IsKeyPressed(KEY_KP_5) || IsKeyPressed(KEY_FIVE)) && highscore >= 30) {
+                    bird.color = 5;
+                } else if ((IsKeyPressed(KEY_KP_6) || IsKeyPressed(KEY_SIX)) && highscore >= 35) {
+                    bird.color = 6;
+                } else if ((IsKeyPressed(KEY_KP_7) || IsKeyPressed(KEY_SEVEN)) && highscore >= 40) {
+                    bird.color = 7;
+                } else if ((IsKeyPressed(KEY_KP_8) || IsKeyPressed(KEY_EIGHT)) && highscore >= 45) {
+                    bird.color = 8;
+                } else if ((IsKeyPressed(KEY_KP_9) || IsKeyPressed(KEY_NINE)) && highscore >= 50) {
+                    bird.color = 9;
+                }
+                if (bird.color == 1) {
+                    DrawRectangle((GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) - 55, 20, 20, BLACK);
+                } else if (bird.color == 2) {
+                    DrawRectangle((GetScreenWidth() / 2) - 50, (GetScreenHeight() / 2) - 55, 20, 20, BLACK);
+                } else if (bird.color == 3) {
+                    DrawRectangle((GetScreenWidth() / 2) + 100, (GetScreenHeight() / 2) - 55, 20, 20, BLACK);
+                } else if (bird.color == 4) {
+                    DrawRectangle((GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 45, 20, 20, BLACK);
+                } else if (bird.color == 5) {
+                    DrawRectangle((GetScreenWidth() / 2) - 50, (GetScreenHeight() / 2) + 45, 20, 20, BLACK);
+                } else if (bird.color == 6) {
+                    DrawRectangle((GetScreenWidth() / 2) + 100, (GetScreenHeight() / 2) + 45, 20, 20, BLACK);
+                } else if (bird.color == 7) {
+                    DrawRectangle((GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 145, 20, 20, BLACK);
+                } else if (bird.color == 8) {
+                    DrawRectangle((GetScreenWidth() / 2) - 50, (GetScreenHeight() / 2) + 145, 20, 20, BLACK);
+                } else if (bird.color == 9) {
+                    DrawRectangle((GetScreenWidth() / 2) + 100, (GetScreenHeight() / 2) + 145, 20, 20, BLACK);
+                }
+
+                BeginDrawing();
+                ClearBackground(DARKGRAY);
+                const char *storeMessage = "Store";
+                const char *highscoreMessage = TextFormat("Highscore: %d", highscore);
+                const char *resetMessage = "press S to close store";
+                DrawText(storeMessage, (GetScreenWidth() - MeasureText(storeMessage, 100)) / 2, (GetScreenHeight() - 550) / 2, 100, WHITE);
+                DrawText(highscoreMessage, (GetScreenWidth() - MeasureText(highscoreMessage, 60)) / 2, (GetScreenHeight() - 350) / 2, 60, WHITE);
+                DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 390) / 2, 30, WHITE);
+
+                // Desenhar pássaro 1
+                DrawRectangle((GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) - 80, 40, 40, YELLOW);
+                DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) - 70, 20, 20, WHITE);
+                DrawRectangle((GetScreenWidth() / 2) - 150, (GetScreenHeight() / 2) - 70, 10, 10, BLACK);
+                DrawRectangle((GetScreenWidth() / 2) - 140, (GetScreenHeight() / 2) - 60, 20, 10, ORANGE);
+                DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) - 70, 30, 20, ORANGE);
+                DrawText("1", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) - 55, 20, WHITE);
+
+                if (highscore >= 15) {
+                    // Desenhar pássaro 2
+                    DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) - 80, 40, 40, GREEN);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) - 70, 20, 20, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2), (GetScreenHeight() / 2) - 70, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 10, (GetScreenHeight() / 2) - 60, 20, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) + 15, (GetScreenHeight() / 2) - 50, 5, 5, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) + 20, (GetScreenHeight() / 2) - 50, 10, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) - 70, 30, 20, DARKGREEN);
+                    DrawText("2", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) - 55, 20, WHITE);
+                }
+                if (highscore >= 20) {
+                    // Desenhar pássaro 3
+                    DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) - 80, 40, 40, DARKBLUE);
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) - 70, 20, 20, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2) + 150, (GetScreenHeight() / 2) - 70, 10, 10, BLACK);   
+                    DrawRectangle((GetScreenWidth() / 2) + 160, (GetScreenHeight() / 2) - 60, 20, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 165, (GetScreenHeight() / 2) - 50, 5, 5, BLACK);  
+                    DrawRectangle((GetScreenWidth() / 2) + 170, (GetScreenHeight() / 2) - 50, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 115, (GetScreenHeight() / 2) - 70, 30, 20, BLUE);
+                    DrawText("3", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) - 55, 20, WHITE);
+                }
+                if (highscore >= 25) {
+                    // Desenhar pássaro 4
+                    DrawRectangle((GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) + 20, 40, 40, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 30, 20, 20, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 150, (GetScreenHeight() / 2) + 30, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) - 130, (GetScreenHeight() / 2) + 40, 10, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 45, 20, 5, PINK);
+                    DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) + 30, 30, 20, WHITE);
+                    DrawText("4", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) + 45, 20, WHITE);
+                }
+                if (highscore >= 30) {
+                    // Desenhar pássaro 5
+                    DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) + 20, 40, 40, BROWN);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 30, 20, 20, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2), (GetScreenHeight() / 2) + 30, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 10, (GetScreenHeight() / 2) + 40, 30, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2), (GetScreenHeight() / 2) + 15, 10, 5, BROWN);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 10, 10, 5, BROWN);
+                    DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) + 30, 30, 20, DARKBROWN);
+                    DrawText("5", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) + 45, 20, WHITE);
+                }
+                if (highscore >= 35) {
+                    // Desenhar pássaro 6
+                    DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) + 20, 40, 40, PINK);
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 30, 20, 20, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2) + 150, (GetScreenHeight() / 2) + 30, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 160, (GetScreenHeight() / 2) + 40, 20, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) + 165, (GetScreenHeight() / 2) + 50, 5, 5, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) + 170, (GetScreenHeight() / 2) + 50, 10, 10, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 115, (GetScreenHeight() / 2) + 30, 30, 20, DARKPURPLE);
+                    DrawText("6", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) + 45, 20, WHITE);
+                }
+                if (highscore >= 40) {
+                    // Desenhar pássaro 7
+                    DrawRectangle((GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) + 120, 40, 40, PURPLE);
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 130, 20, 20, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) - 150, (GetScreenHeight() / 2) + 130, 10, 10, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2) - 140, (GetScreenHeight() / 2) + 140, 20, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) + 130, 30, 20, DARKBLUE);
+                    DrawText("7", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) + 145, 20, WHITE);
+                }
+                if (highscore >= 45) {
+                    // Desenhar pássaro 8
+                    DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) + 120, 40, 40, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 130, 20, 20, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2), (GetScreenHeight() / 2) + 130, 10, 10, RED);
+                    DrawRectangle((GetScreenWidth() / 2) + 10, (GetScreenHeight() / 2) + 140, 20, 10, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) + 130, 30, 20, RED);
+                    DrawText("8", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) + 145, 20, WHITE);
+                }
+                if (highscore >= 50) {
+                    // Desenhar pássaro 9
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 130, 20, 20, YELLOW);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) + 135, 10, 10, WHITE);
+                    DrawRectangle((GetScreenWidth() / 2) + 150, (GetScreenHeight() / 2) + 135, 5, 5, BLACK);
+                    DrawRectangle((GetScreenWidth() / 2) + 155, (GetScreenHeight() / 2) + 140, 10, 5, ORANGE);
+                    DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) + 135, 15, 10, ORANGE);
+                    DrawText("9", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) + 145, 20, WHITE);
+                }
+
+                EndDrawing();
+                continue;
+
+
 
 
             } else {
@@ -119,8 +265,8 @@ int main(void) {
                     ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
                 }
 
-                if (IsKeyPressed(KEY_R)) {
-                    ResetGame(&bird, pipe, &score, &speed, &gameOver, &lastScore);
+                if (IsKeyPressed(KEY_S)) {
+                    store = true;
                 }
 
                 BeginDrawing();
@@ -176,11 +322,21 @@ int main(void) {
 
         // Verificar colisão com os canos ou com os limites da tela
         for (int i = 0; i < 2; i++) {
-            if ((bird.x + 40 > pipe[i].x && bird.x < pipe[i].x + 50) &&
-                (bird.y < pipe[i].height || bird.y + 40 > pipe[i].height + 150)) {
-                gameOver = true; // Colisão com o cano
+            if (bird.color == 9) {
+                // Adaptação para o pássaro com color == 9 (dimensões 20x20)
+                if ((bird.x + 20 > pipe[i].x && bird.x < pipe[i].x + 50) &&
+                    (bird.y < pipe[i].height || bird.y + 20 > pipe[i].height + 150)) {
+                    gameOver = true; // Colisão com o cano
+                }
+            } else {
+                // Colisão para outros pássaros (dimensões 40x40)
+                if ((bird.x + 40 > pipe[i].x && bird.x < pipe[i].x + 50) &&
+                    (bird.y < pipe[i].height || bird.y + 40 > pipe[i].height + 150)) {
+                    gameOver = true; // Colisão com o cano
+                }
             }
         }
+
 
         if (bird.y > GetScreenHeight() || bird.y < 0) gameOver = true; // Colisão com o teto ou o chão
 
@@ -224,14 +380,106 @@ int main(void) {
         ClearBackground(backgroundColor); // Alternar entre fundo claro e escuro
 
         // Desenhar pássaro
-        DrawRectangle(bird.x, bird.y, 40, 40, YELLOW);
-        DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
-        DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
-        DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
-        if (bird.flaping) {
-            DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, ORANGE);
-        } else {
-            DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, ORANGE);
+        if (bird.color == 1){
+            DrawRectangle(bird.x, bird.y, 40, 40, YELLOW);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, ORANGE);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, ORANGE);
+            }
+        } else if (bird.color == 2){
+            DrawRectangle(bird.x, bird.y, 40, 40, GREEN);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
+            DrawRectangle(bird.x + 35, bird.y + 30, 5, 5, ORANGE);
+            DrawRectangle(bird.x + 40, bird.y + 30, 10, 10, ORANGE);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, DARKGREEN);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, DARKGREEN);
+            }
+        } else if (bird.color == 3){
+            DrawRectangle(bird.x, bird.y, 40, 40, DARKBLUE);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, BLACK);
+            DrawRectangle(bird.x + 35, bird.y + 30, 5, 5, BLACK);
+            DrawRectangle(bird.x + 40, bird.y + 30, 10, 10, BLACK);
+
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, BLUE);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, BLUE);
+            }
+        } else if (bird.color == 4){
+            DrawRectangle(bird.x, bird.y, 40, 40, WHITE);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, LIGHTGRAY);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 40, bird.y + 20, 10, 10, ORANGE);
+            DrawRectangle(bird.x + 10, bird.y + 25, 20, 5, PINK);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, WHITE);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, WHITE);
+            }
+        } else if (bird.color == 5){
+            DrawRectangle(bird.x, bird.y, 40, 40, BROWN);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 30, bird.y + 20, 30, 10, ORANGE);
+            DrawRectangle(bird.x + 20, bird.y - 5, 10, 5, BROWN);
+            DrawRectangle(bird.x + 10, bird.y - 10, 10, 5, BROWN);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, DARKBROWN);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, DARKBROWN);
+            }
+        } else if (bird.color == 6){
+            DrawRectangle(bird.x, bird.y, 40, 40, PINK);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
+            DrawRectangle(bird.x + 40, bird.y + 25, 5, 5, ORANGE);
+            DrawRectangle(bird.x + 40, bird.y + 30, 10, 10, BLACK);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, DARKPURPLE);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, DARKPURPLE);
+            }
+        } else if (bird.color == 7){
+            DrawRectangle(bird.x, bird.y, 40, 40, PURPLE);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, BLACK);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, WHITE);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, DARKBLUE);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, DARKBLUE);
+            }
+        } else if (bird.color == 8){
+            DrawRectangle(bird.x, bird.y, 40, 40, BLACK);
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, RED);
+            DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
+            if (bird.flaping) {
+                DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, RED);
+            } else {
+                DrawRectangle(bird.x - 15, bird.y + 10, 30, 20, RED);
+            }
+        } else if (bird.color == 9){
+            DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, YELLOW);
+            DrawRectangle(bird.x + 15, bird.y + 15, 10, 10, WHITE);
+            DrawRectangle(bird.x + 20, bird.y + 15, 5, 5, BLACK);
+            DrawRectangle(bird.x + 25, bird.y + 20, 10, 5, ORANGE);
+            if (bird.flaping) {
+                DrawRectangle(bird.x, bird.y + 20, 15, 10, ORANGE);
+            } else {
+                DrawRectangle(bird.x, bird.y + 15, 15, 10, ORANGE);
+            }
         }
 
         // Desenhar canos com a cor alternada junto ao céu
