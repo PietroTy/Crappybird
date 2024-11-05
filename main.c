@@ -248,6 +248,7 @@ int main(void) {
                     DrawText("9", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) + 145, 20, WHITE);
                 }
 
+                DrawText(TextFormat("©PietroTy 2024"), 10, 570, 20, WHITE);
                 EndDrawing();
                 continue;
 
@@ -279,6 +280,8 @@ int main(void) {
                 DrawText(scoreMessage, (GetScreenWidth() - MeasureText(scoreMessage, 60)) / 2, (GetScreenHeight() + 100) / 2, 60, WHITE);
                 DrawText(highscoreMessage, (GetScreenWidth() - MeasureText(highscoreMessage, 40)) / 2, (GetScreenHeight() + 260) / 2, 40, WHITE);
                 DrawText(resetMessage, (GetScreenWidth() - MeasureText(resetMessage, 30)) / 2, (GetScreenHeight() + 390) / 2, 30, WHITE);
+                
+                DrawText(TextFormat("©PietroTy 2024"), 10, 570, 20, WHITE);
                 EndDrawing();
                 continue;
 
@@ -443,7 +446,7 @@ int main(void) {
             DrawRectangle(bird.x + 10, bird.y + 10, 20, 20, WHITE);
             DrawRectangle(bird.x + 20, bird.y + 10, 10, 10, BLACK);
             DrawRectangle(bird.x + 30, bird.y + 20, 20, 10, ORANGE);
-            DrawRectangle(bird.x + 40, bird.y + 25, 5, 5, ORANGE);
+            DrawRectangle(bird.x + 35, bird.y + 30, 5, 5, ORANGE);
             DrawRectangle(bird.x + 40, bird.y + 30, 10, 10, BLACK);
             if (bird.flaping) {
                 DrawRectangle(bird.x - 15, bird.y + 20, 30, 20, DARKPURPLE);
@@ -492,6 +495,8 @@ int main(void) {
 
         // Mostrar o placar
         DrawText(TextFormat("Score: %d", score), 10, 10, 30, WHITE);
+
+        DrawText(TextFormat("©PietroTy 2024"), 10, 570, 20, WHITE);
 
         EndDrawing();
     }

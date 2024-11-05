@@ -2,7 +2,7 @@
  Flappy Bird using Raylib in C, idealized by Rodrigo Garcia.
 
 # Autor
- Pietro Turci
+ Pietro Turci (PietroTy).
 
-# Github
- PietroTy
+# Play
+ Open the .exe archive.
