@@ -162,12 +162,14 @@
 // Some Basic Colors
 // NOTE: Custom raylib color palette for amazing visuals on WHITE background
 
+#define THEGRAY    CLITERAL(Color){ 30, 30, 30, 255 }      // TheGray
 #define LIGHTGRAY  CLITERAL(Color){ 200, 200, 200, 255 }   // Light Gray
 #define GRAY       CLITERAL(Color){ 130, 130, 130, 255 }   // Gray
 #define DARKGRAY   CLITERAL(Color){ 80, 80, 80, 255 }      // Dark Gray
 #define YELLOW     CLITERAL(Color){ 253, 249, 0, 255 }     // Yellow
 #define GOLD       CLITERAL(Color){ 255, 203, 0, 255 }     // Gold
 #define ORANGE     CLITERAL(Color){ 255, 161, 0, 255 }     // Orange
+#define DARKORANGE CLITERAL(Color){ 255, 61, 0, 255 }      // Orange
 #define PINK       CLITERAL(Color){ 255, 109, 194, 255 }   // Pink
 #define RED        CLITERAL(Color){ 230, 41, 55, 255 }     // Red
 #define MAROON     CLITERAL(Color){ 190, 33, 55, 255 }     // Maroon
@@ -177,6 +179,7 @@
 #define SKYBLUE    CLITERAL(Color){ 102, 191, 255, 255 }   // Sky Blue
 #define BLUE       CLITERAL(Color){ 0, 121, 241, 255 }     // Blue
 #define DARKBLUE   CLITERAL(Color){ 0, 82, 172, 255 }      // Dark Blue
+#define DEEPBLUE   CLITERAL(Color){ 0, 0, 172, 255 }      // Dark Blue
 #define PURPLE     CLITERAL(Color){ 200, 122, 255, 255 }   // Purple
 #define VIOLET     CLITERAL(Color){ 135, 60, 190, 255 }    // Violet
 #define DARKPURPLE CLITERAL(Color){ 112, 31, 126, 255 }    // Dark Purple

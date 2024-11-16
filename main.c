@@ -18,6 +18,14 @@ typedef struct Pipe {
     bool isActive;
 } Pipe;
 
+// Define the cloud structure
+typedef struct Cloud {
+    float x, y;  // Position of the cloud
+    Color color; // Color of the cloud
+    
+} Cloud;
+
+
 void ResetGame(Bird *bird, Pipe *pipe, int *score, int *speed, bool *gameOver, int *lastScore) {
     // Reiniciar pássaro
     bird->x = (GetScreenWidth() - 300) / 2; // Posição inicial do pássaro
@@ -51,7 +59,7 @@ Color LerpColor(Color a, Color b, float t) {
 
 // Função para salvar o *highscore* em um arquivo
 void SaveHighscore(int highscore) {
-    FILE *file = fopen("resources/Highscore.txt", "w");
+    FILE *file = fopen("resources/CrappyHighscore.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d\n", highscore);
         fclose(file);
@@ -63,7 +71,7 @@ void SaveHighscore(int highscore) {
 
 // Função para carregar o *highscore* do arquivo
 int LoadHighscore() {
-    FILE *file = fopen("resources/Highscore.txt", "r");
+    FILE *file = fopen("resources/CrappyHighscore.txt", "r");
     int highscore = 0;
 
     if (file != NULL) {
@@ -88,7 +96,7 @@ int main(void) {
     int highscore = LoadHighscore(); // Carrega o *highscore* ao iniciar o jogo
     bird.color = 1;
 
-    InitWindow(600, 600, "CrappyBird");
+    InitWindow(600, 600, "Crappybird");
     SetWindowIcon(LoadImage("resources/iconeCrappy.png"));
     SetTargetFPS(60);
 
@@ -96,10 +104,18 @@ int main(void) {
     
     float startTime = GetTime(); // Tempo inicial do jogo
 
-    Color darkBlue = DARKBLUE;
-    Color skyBlue = SKYBLUE;
-    Color lime = LIME;
-    Color darkGreen = DARKGREEN;
+    // Define an array of 3 clouds
+    Cloud clouds[6];
+
+    // Initialize clouds with random heights
+    for (int i = 0; i < 6; i++) {
+        clouds[i].x = i * 100;  // Spread them out a bit initially
+        clouds[i].y = GetRandomValue(100, GetScreenHeight());    // Randomize height between 50 and 200
+        clouds[i].color = WHITE;                  // Set cloud color (can be changed)
+    }
+
+    float cloudSpeed = 1.0f;  // Speed of the clouds (slower than the pipes)
+
 
     while (!WindowShouldClose()) {
         // Atualização do tempo e lógica do jogo
@@ -150,7 +166,7 @@ int main(void) {
                 }
 
                 BeginDrawing();
-                ClearBackground(DARKGRAY);
+                ClearBackground(THEGRAY);
                 const char *storeMessage = "Store";
                 const char *highscoreMessage = TextFormat("Highscore: %d", highscore);
                 const char *resetMessage = "press S to close store";
@@ -166,6 +182,13 @@ int main(void) {
                 DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) - 70, 30, 20, ORANGE);
                 DrawText("1", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) - 55, 20, WHITE);
 
+
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) - 70, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) - 80, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) - 75, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 5, (GetScreenHeight() / 2) - 75, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) - 65, 10, 10, THEGRAY);
+
                 if (highscore >= 15) {
                     // Desenhar pássaro 2
                     DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) - 80, 40, 40, GREEN);
@@ -177,6 +200,12 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) - 70, 30, 20, DARKGREEN);
                     DrawText("2", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) - 55, 20, WHITE);
                 }
+
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) - 70, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) - 80, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) - 75, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 155, (GetScreenHeight() / 2) - 75, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) - 65, 10, 10, THEGRAY);
                 if (highscore >= 20) {
                     // Desenhar pássaro 3
                     DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) - 80, 40, 40, DARKBLUE);
@@ -188,6 +217,11 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) + 115, (GetScreenHeight() / 2) - 70, 30, 20, BLUE);
                     DrawText("3", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) - 55, 20, WHITE);
                 }
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 30, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 155, (GetScreenHeight() / 2) + 20, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 145, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 155, (GetScreenHeight() / 2) + 35, 10, 10, THEGRAY);
                 if (highscore >= 25) {
                     // Desenhar pássaro 4
                     DrawRectangle((GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) + 20, 40, 40, WHITE);
@@ -198,6 +232,11 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) + 30, 30, 20, WHITE);
                     DrawText("4", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) + 45, 20, WHITE);
                 }
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 30, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) + 20, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 5, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) + 35, 10, 10, THEGRAY);
                 if (highscore >= 30) {
                     // Desenhar pássaro 5
                     DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) + 20, 40, 40, BROWN);
@@ -209,6 +248,11 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) + 30, 30, 20, DARKBROWN);
                     DrawText("5", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) + 45, 20, WHITE);
                 }
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 30, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) + 20, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 155, (GetScreenHeight() / 2) + 25, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) + 35, 10, 10, THEGRAY);
                 if (highscore >= 35) {
                     // Desenhar pássaro 6
                     DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) + 20, 40, 40, PINK);
@@ -220,6 +264,11 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) + 115, (GetScreenHeight() / 2) + 30, 30, 20, DARKPURPLE);
                     DrawText("6", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) + 45, 20, WHITE);
                 }
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 130, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 155, (GetScreenHeight() / 2) + 120, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 160, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 145, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 155, (GetScreenHeight() / 2) + 135, 10, 10, THEGRAY);
                 if (highscore >= 40) {
                     // Desenhar pássaro 7
                     DrawRectangle((GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) + 120, 40, 40, PURPLE);
@@ -229,6 +278,12 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) - 185, (GetScreenHeight() / 2) + 130, 30, 20, DARKBLUE);
                     DrawText("7", (GetScreenWidth() / 2) - 195, (GetScreenHeight() / 2) + 145, 20, WHITE);
                 }
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 130, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) + 120, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 10, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 5, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) - 5, (GetScreenHeight() / 2) + 135, 10, 10, THEGRAY);
+
                 if (highscore >= 45) {
                     // Desenhar pássaro 8
                     DrawRectangle((GetScreenWidth() / 2) - 20, (GetScreenHeight() / 2) + 120, 40, 40, BLACK);
@@ -238,6 +293,7 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) - 35, (GetScreenHeight() / 2) + 130, 30, 20, RED);
                     DrawText("8", (GetScreenWidth() / 2) - 45, (GetScreenHeight() / 2) + 145, 20, WHITE);
                 }
+                  
                 if (highscore >= 50) {
                     // Desenhar pássaro 9
                     DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 130, 20, 20, YELLOW);
@@ -246,6 +302,12 @@ int main(void) {
                     DrawRectangle((GetScreenWidth() / 2) + 155, (GetScreenHeight() / 2) + 140, 10, 5, ORANGE);
                     DrawRectangle((GetScreenWidth() / 2) + 130, (GetScreenHeight() / 2) + 135, 15, 10, ORANGE);
                     DrawText("9", (GetScreenWidth() / 2) + 105, (GetScreenHeight() / 2) + 145, 20, WHITE);
+                } else {
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 130, 20, 20, GRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) + 120, 10, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 140, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 155, (GetScreenHeight() / 2) + 125, 5, 5, LIGHTGRAY);
+                    DrawRectangle((GetScreenWidth() / 2) + 145, (GetScreenHeight() / 2) + 135, 10, 10, THEGRAY);
                 }
 
                 DrawText(TextFormat("©PietroTy 2024"), 10, 570, 20, WHITE);
@@ -350,6 +412,16 @@ int main(void) {
             }
         }
 
+        // Move each cloud to the left at a slower pace
+        for (int i = 0; i < 6; i++) {
+            clouds[i].x -= cloudSpeed;
+
+            // If the cloud moves off the screen (on the left), reset its position to the right side with random height
+            if (clouds[i].x + 100 < 0) {  // 100 is the width of the cloud
+                clouds[i].x = GetScreenWidth();
+                clouds[i].y = GetRandomValue(100, GetScreenHeight());    // Randomize height between 50 and 200
+            }
+        }
         // Alternar gradualmente entre SKYBLUE e DARKBLUE
         float elapsedTime = GetTime() - startTime;
         float cycleTime = 40.0f; // Tempo total para ciclo completo (20s clareando e 20s escurecendo)
@@ -358,29 +430,55 @@ int main(void) {
         Color backgroundColor;
         if (t < 0.5f) {
             // Transição de SKYBLUE para DARKBLUE
-            backgroundColor = LerpColor(skyBlue, darkBlue, t * 2);
+            backgroundColor = LerpColor(SKYBLUE, DEEPBLUE, t * 2);
         } else {
             // Transição de DARKBLUE para SKYBLUE
-            backgroundColor = LerpColor(darkBlue, skyBlue, (t - 0.5f) * 2);
+            backgroundColor = LerpColor(DEEPBLUE, SKYBLUE, (t - 0.5f) * 2);
+        }
+
+        Color sunColor;
+        if (t < 0.5f) {
+            // Transição de SKYBLUE para DARKBLUE
+            sunColor = LerpColor(GOLD, DARKORANGE, t * 2);
+        } else {
+            // Transição de DARKBLUE para SKYBLUE
+            sunColor = LerpColor(DARKORANGE, GOLD, (t - 0.5f) * 2);
+        }
+        Color cloudColor;
+        if (t < 0.5f) {
+            // Transição de SKYBLUE para DARKBLUE
+            cloudColor = LerpColor(WHITE, DARKGRAY, t * 2);
+        } else {
+            // Transição de DARKBLUE para SKYBLUE
+            cloudColor = LerpColor(DARKGRAY, WHITE, (t - 0.5f) * 2);
         }
 
         Color pipeColor;
         if (t < 0.5f) {
-            pipeColor = LerpColor(lime, darkGreen, t * 2);
+            pipeColor = LerpColor(LIME, DARKGREEN, t * 2);
         } else {
-            pipeColor = LerpColor(darkGreen, lime, (t - 0.5f) * 2);
+            pipeColor = LerpColor(DARKGREEN, LIME, (t - 0.5f) * 2);
         }
 
         Color pipeBorderColor;
         if (t < 0.5f) {
-            pipeBorderColor = LerpColor(darkGreen, lime, t * 2);
+            pipeBorderColor = LerpColor(DARKGREEN, LIME, t * 2);
         } else {
-            pipeBorderColor = LerpColor(lime, darkGreen, (t - 0.5f) * 2);
+            pipeBorderColor = LerpColor(LIME, DARKGREEN, (t - 0.5f) * 2);
         }
 
         // Desenhar
         BeginDrawing();
         ClearBackground(backgroundColor); // Alternar entre fundo claro e escuro
+
+        DrawRectangle(clouds[5].x, 100, 100, 100, sunColor); // Add a fluffy part of the cloud
+
+        // Draw each cloud
+        for (int i = 0; i < 6; i++) {
+            DrawRectangle(clouds[i].x, clouds[i].y, 100, 20, cloudColor); // Draw the cloud as a rectangle
+            DrawRectangle(clouds[i].x + 30, clouds[i].y - 20, 40, 20, cloudColor); // Add a fluffy part of the cloud
+        }
+
 
         // Desenhar pássaro
         if (bird.color == 1){
@@ -491,7 +589,9 @@ int main(void) {
             DrawRectangle(pipe[i].x - 5, pipe[i].height - 15, 60, 15, pipeBorderColor);
             DrawRectangle(pipe[i].x, pipe[i].height + 150, 50, GetScreenHeight() - pipe[i].height - 150, pipeBorderColor);
             DrawRectangle(pipe[i].x - 5, pipe[i].height + 150, 60, 15, pipeColor);
+
         }
+
 
         // Mostrar o placar
         DrawText(TextFormat("Score: %d", score), 10, 10, 30, WHITE);
